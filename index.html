@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Indy-1] NextMission Navigator | AI 7993 Spring 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --army-green: #333C2C;
+    --deep-green: #1E2518;
+    --olive: #4A513A;
+    --sage: #9FA77A;
+    --pale-olive: #C6C7A2;
+    --sandstone: #C2BA9A;
+    --desert: #B4A581;
+    --tan: #A37E4C;
+    --gold: #BCA55A;
+    --gold-light: #D4BC6E;
+    --navy: #222833;
+    --cream: #F5F3EC;
+    --warm-white: #FAF8F2;
+    --charcoal: #1A1F17;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--charcoal);
+    color: var(--cream);
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 2px,
+      rgba(188,165,90,0.025) 2px, rgba(188,165,90,0.025) 4px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 70px 1fr 38px;
+    height: 100vh;
+  }
+
+  /* ════ SIDEBAR ════ */
+  .sidebar {
+    grid-row: 1 / -1;
+    background: var(--deep-green);
+    border-right: 1px solid rgba(188,165,90,0.25);
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.5s ease both;
+  }
+
+  .sidebar-top {
+    background: linear-gradient(160deg, var(--army-green) 0%, var(--deep-green) 100%);
+    padding: 20px 22px 18px;
+    border-bottom: 1px solid rgba(188,165,90,0.2);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .sidebar-top::after {
+    content: '';
+    position: absolute;
+    bottom: -25px; right: -25px;
+    width: 90px; height: 90px;
+    border: 2px solid rgba(188,165,90,0.12);
+    border-radius: 50%;
+  }
+
+  .project-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--charcoal);
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--warm-white);
+    line-height: 1.15;
+    margin-bottom: 3px;
+  }
+
+  .sidebar-subtitle {
+    font-size: 12px;
+    color: var(--pale-olive);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .team-section {
+    padding: 16px 22px 14px;
+    border-bottom: 1px solid rgba(188,165,90,0.12);
+    flex-shrink: 0;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .team-member {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  }
+
+  .avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--olive);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .member-info strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--warm-white);
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+
+  .member-info span {
+    font-size: 12px;
+    color: var(--sage);
+    line-height: 1.4;
+  }
+
+  .course-info {
+    padding: 14px 22px;
+    border-bottom: 1px solid rgba(188,165,90,0.12);
+    flex-shrink: 0;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 7px;
+  }
+  .info-row:last-child { margin-bottom: 0; }
+
+  .info-row .lbl {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--desert);
+  }
+
+  .info-row .val {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 13px;
+    color: var(--cream);
+    font-weight: 700;
+  }
+
+  .nav-section {
+    padding: 14px 22px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .nav-section::-webkit-scrollbar { width: 3px; }
+  .nav-section::-webkit-scrollbar-thumb { background: var(--olive); border-radius: 2px; }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--sandstone);
+    font-size: 13.5px;
+    font-weight: 400;
+    margin-bottom: 4px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+
+  .nav-link:hover {
+    background: rgba(188,165,90,0.1);
+    border-color: rgba(188,165,90,0.2);
+    color: var(--gold-light);
+  }
+
+  .nav-link .nav-icon { font-size: 15px; width: 22px; text-align: center; flex-shrink: 0; }
+
+  .nav-link.primary {
+    background: rgba(188,165,90,0.13);
+    border-color: rgba(188,165,90,0.35);
+    color: var(--gold-light);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .nav-link.primary:hover { background: rgba(188,165,90,0.22); }
+
+  .nav-divider { height: 1px; background: rgba(188,165,90,0.1); margin: 8px 0; }
+
+  .sidebar-footer {
+    padding: 10px 22px;
+    border-top: 1px solid rgba(188,165,90,0.15);
+    font-size: 11px;
+    color: var(--olive);
+    text-align: center;
+    letter-spacing: 0.4px;
+    flex-shrink: 0;
+    line-height: 1.5;
+  }
+
+  /* ════ HEADER ════ */
+  .main-header {
+    grid-column: 2;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--army-green) 60%, var(--olive) 100%);
+    padding: 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+    animation: fadeDown 0.4s 0.1s ease both;
+  }
+
+  .main-header::before {
+    content: '⬡';
+    position: absolute;
+    right: 50px; top: -30px;
+    font-size: 160px;
+    color: rgba(188,165,90,0.05);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .header-left h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--warm-white);
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+
+  .header-left p {
+    font-size: 13px;
+    color: var(--pale-olive);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(159,167,122,0.18);
+    border: 1px solid rgba(159,167,122,0.4);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sage);
+    letter-spacing: 1px;
+  }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--sage);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .github-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--charcoal);
+    border: 1px solid rgba(188,165,90,0.4);
+    border-radius: 4px;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+
+  .github-btn:hover { border-color: var(--gold); background: rgba(188,165,90,0.1); }
+
+  /* ════ MAIN CONTENT ════ */
+  .main-content {
+    grid-column: 2;
+    padding: 20px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 340px;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+    overflow: hidden;
+    animation: fadeUp 0.4s 0.2s ease both;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(188,165,90,0.18);
+    border-radius: 6px;
+    padding: 18px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card:hover { border-color: rgba(188,165,90,0.32); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 70%);
+  }
+
+  .card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--warm-white);
+    line-height: 1.25;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .card-body {
+    font-size: 13.5px;
+    color: var(--sandstone);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .overview-card {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    background: linear-gradient(135deg, rgba(51,60,44,0.55) 0%, rgba(34,40,51,0.55) 100%);
+    border-color: rgba(188,165,90,0.22);
+  }
+
+  .feature-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+    flex-shrink: 0;
+  }
+
+  .pill {
+    background: rgba(188,165,90,0.1);
+    border: 1px solid rgba(188,165,90,0.28);
+    border-radius: 3px;
+    padding: 4px 11px;
+    font-size: 12px;
+    color: var(--pale-olive);
+    letter-spacing: 0.4px;
+    font-weight: 600;
+  }
+
+  /* Video: right col both rows */
+  .video-card {
+    grid-column: 3;
+    grid-row: 1 / 3;
+    background: linear-gradient(160deg, rgba(34,40,51,0.85) 0%, rgba(51,60,44,0.6) 100%);
+  }
+
+  .video-thumb {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--army-green) 100%);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .video-thumb::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 3px,
+      rgba(188,165,90,0.04) 3px, rgba(188,165,90,0.04) 4px
+    );
+  }
+
+  .play-btn {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(188,165,90,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .video-thumb:hover .play-btn { transform: scale(1.12); background: var(--gold); }
+
+  .play-btn svg { width: 26px; height: 26px; fill: var(--charcoal); margin-left: 4px; }
+
+  .video-label {
+    position: absolute;
+    bottom: 10px; left: 12px;
+    font-size: 11px;
+    color: var(--pale-olive);
+    letter-spacing: 1px;
+    z-index: 1;
+    font-weight: 600;
+  }
+
+  .video-desc {
+    font-size: 13px;
+    color: var(--sandstone);
+    line-height: 1.6;
+    margin-bottom: 14px;
+    flex-shrink: 0;
+  }
+
+  .watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(188,165,90,0.15);
+    border: 1px solid rgba(188,165,90,0.45);
+    border-radius: 4px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--gold-light);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .watch-btn:hover { background: rgba(188,165,90,0.28); border-color: var(--gold); }
+
+  /* Stack: bottom-left */
+  .stack-card { grid-column: 1; grid-row: 2; }
+
+  .stack { display: flex; flex-direction: column; gap: 0; flex: 1; justify-content: space-around; }
+
+  .stack-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(188,165,90,0.08);
+  }
+  .stack-row:last-child { border-bottom: none; }
+
+  .stack-icon {
+    width: 32px; height: 32px;
+    border-radius: 5px;
+    background: rgba(188,165,90,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .stack-name { font-size: 13.5px; color: var(--cream); font-weight: 700; }
+  .stack-detail { font-size: 11.5px; color: var(--sage); margin-top: 1px; }
+
+  /* Bottom-center: stacked milestones + IP */
+  .bottom-center {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .milestone-card, .ip-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(188,165,90,0.18);
+    border-radius: 6px;
+    padding: 16px 20px;
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  .milestone-card::before, .ip-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 70%);
+  }
+
+  .mc-label, .ip-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .milestone-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .milestone {
+    flex: 1;
+    background: rgba(188,165,90,0.08);
+    border: 1px solid rgba(188,165,90,0.18);
+    border-radius: 4px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+
+  .milestone .m-num {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+  }
+
+  .milestone .m-label {
+    font-size: 9.5px;
+    color: var(--desert);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    display: block;
+  }
+
+  .m-summary {
+    font-size: 13px;
+    color: var(--sandstone);
+    line-height: 1.55;
+  }
+
+  .ip-body {
+    font-size: 13px;
+    color: var(--sandstone);
+    line-height: 1.65;
+  }
+
+  /* ════ FOOTER ════ */
+  .main-footer {
+    grid-column: 2;
+    background: rgba(0,0,0,0.35);
+    border-top: 1px solid rgba(188,165,90,0.1);
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--olive);
+  }
+
+  .footer-right { display: flex; gap: 22px; align-items: center; }
+
+  .footer-link {
+    color: var(--tan);
+    text-decoration: none;
+    font-size: 11.5px;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--gold); }
+
+  @keyframes slideIn { from{transform:translateX(-20px);opacity:0} to{transform:translateX(0);opacity:1} }
+  @keyframes fadeDown { from{transform:translateY(-10px);opacity:0} to{transform:translateY(0);opacity:1} }
+  @keyframes fadeUp { from{transform:translateY(10px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+  .shimmer {
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+  @keyframes shimmer { from{background-position:0% center} to{background-position:200% center} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="project-badge">INDY-1 · SPRING 2026</div>
+      <div class="sidebar-title">NextMission<br>Navigator</div>
+      <div class="sidebar-subtitle">VetNavi.AI</div>
+    </div>
+
+    <div class="team-section">
+      <div class="section-label">Project Developer</div>
+      <div class="team-member">
+        <div class="avatar">
+          <img src="IMG_6216.jpg" alt="Crystal Tubbs" onerror="this.parentElement.textContent='CT'">
+        </div>
+        <div class="member-info">
+          <strong>Crystal Tubbs</strong>
+          <span>AI Engineer · Full-Stack Developer<br>Prompt Engineer · Voice AI Integrator</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="course-info">
+      <div class="info-row"><span class="lbl">Course</span><span class="val">AI 7993</span></div>
+      <div class="info-row"><span class="lbl">Semester</span><span class="val">Spring 2026</span></div>
+      <div class="info-row"><span class="lbl">Advisor</span><span class="val">Dr. Arthur Choi</span></div>
+      <div class="info-row"><span class="lbl">Institution</span><span class="val">KSU · CCSE</span></div>
+    </div>
+
+    <div class="nav-section">
+      <div class="section-label">Documents &amp; Links</div>
+      <a href="NextMission_FinalReport.pdf" class="nav-link primary" target="_blank">
+        <span class="nav-icon">📄</span> Final Report (PDF)
+      </a>
+      <a href="NextMission_SRS.pdf" class="nav-link" target="_blank">
+        <span class="nav-icon">📋</span> Requirements Spec (SRS)
+      </a>
+      <a href="NextMission_SDD.pdf" class="nav-link" target="_blank">
+        <span class="nav-icon">🏗️</span> Software Design Doc
+      </a>
+      <a href="NextMission_ProjectPlan.pdf" class="nav-link" target="_blank">
+        <span class="nav-icon">📅</span> Project Plan &amp; Gantt
+      </a>
+      <div class="nav-divider"></div>
+      <a href="https://github.com/Msmetamorphosis" class="nav-link" target="_blank">
+        <span class="nav-icon">🐙</span> GitHub (Msmetamorphosis)
+      </a>
+      <a href="https://vetnavi.ai" class="nav-link" target="_blank">
+        <span class="nav-icon">🌐</span> Live Site: VetNavi.AI
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      Kennesaw State University · CCSE<br>
+      © 2026 Metamorphic Curations LLC
+    </div>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-left">
+      <h1><span class="shimmer">NextMission Navigator</span></h1>
+      <p>AI-Powered Veteran Transition Platform · Capstone Final Project</p>
+    </div>
+    <div class="header-right">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        LIVE DEPLOYMENT
+      </div>
+      <a href="https://github.com/Msmetamorphosis" class="github-btn" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- Overview: top 2 cols -->
+    <div class="card overview-card">
+      <div class="card-label">Project Overview</div>
+      <div class="card-title">AI-Driven Veteran Transition Support Platform</div>
+      <div class="card-body">
+        NextMission Navigator is a full-stack, production-grade web application assisting U.S. military veterans transitioning to civilian life. Using the Anthropic Claude API with retrieval-augmented generation, it produces personalized, schema-validated action plans from natural language goals — grounded in a curated regional resource catalog covering career, education, housing, healthcare, finance, and community support. A dual-AI interface combines a text chatbot with an ElevenLabs voice agent for 24/7 accessible guidance. This capstone is a complete custom rebuild (v3) replacing a prior low-code prototype, deployed live at VetNavi.AI.
+      </div>
+      <div class="feature-pills">
+        <span class="pill">Anthropic Claude API</span>
+        <span class="pill">RAG Architecture</span>
+        <span class="pill">Zod Schema Validation</span>
+        <span class="pill">ElevenLabs Voice AI</span>
+        <span class="pill">Next.js 15 · React 19</span>
+        <span class="pill">TypeScript 5.9</span>
+        <span class="pill">Vercel · Tailwind CSS</span>
+      </div>
+    </div>
+
+    <!-- Video: right col, both rows -->
+    <div class="card video-card">
+      <div class="card-label">Final Presentation Video</div>
+      <a href="YOUR_VIDEO_LINK_HERE" class="video-thumb" target="_blank">
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="video-label">▶ NARRATED DEMO · AI 7993</span>
+      </a>
+      <p class="video-desc">Narrated walkthrough covering system architecture, AI design decisions, schema validation pipeline, RAG resource injection, and live demo of action plan generation and voice AI integration.</p>
+      <a href="YOUR_VIDEO_LINK_HERE" class="watch-btn" target="_blank">
+        ▶&nbsp; Watch Presentation
+      </a>
+    </div>
+
+    <!-- Tech Stack: bottom-left -->
+    <div class="card stack-card">
+      <div class="card-label">Technology Stack</div>
+      <div class="stack">
+        <div class="stack-row">
+          <div class="stack-icon">⚡</div>
+          <div><div class="stack-name">Next.js 15 / React 19</div><div class="stack-detail">App Router · TypeScript 5.9</div></div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-icon">🧠</div>
+          <div><div class="stack-name">Anthropic Claude API</div><div class="stack-detail">claude-3-5-sonnet · RAG prompt injection</div></div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-icon">🎙️</div>
+          <div><div class="stack-name">ElevenLabs ConvAI</div><div class="stack-detail">Voice AI agent · Web component</div></div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-icon">✅</div>
+          <div><div class="stack-name">Zod Validation</div><div class="stack-detail">Input + LLM output schema enforcement</div></div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-icon">🚀</div>
+          <div><div class="stack-name">Vercel · Tailwind CSS</div><div class="stack-detail">Serverless edge · Military design system</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestones + IP stacked: bottom-center -->
+    <div class="bottom-center">
+      <div class="milestone-card">
+        <div class="mc-label">Development Milestones</div>
+        <div class="milestone-row">
+          <div class="milestone"><span class="m-num">M1</span><span class="m-label">Architecture</span></div>
+          <div class="milestone"><span class="m-num">M2</span><span class="m-label">API + Schema</span></div>
+          <div class="milestone"><span class="m-num">M3</span><span class="m-label">RAG + Voice</span></div>
+          <div class="milestone"><span class="m-num">M4</span><span class="m-label">UX Polish</span></div>
+          <div class="milestone"><span class="m-num">M5</span><span class="m-label">Production</span></div>
+        </div>
+        <div class="m-summary">200 hours across 5 milestones, Jan–Apr 2026. Complete rebuild from low-code prototype to production TypeScript. Live at <strong style="color:var(--gold)">VetNavi.AI</strong>.</div>
+      </div>
+
+      <div class="ip-card">
+        <div class="ip-label">Repository Notice</div>
+        <div class="ip-body">
+          <strong style="color:var(--gold)">⚠ Private Repository</strong> — Source code at <strong style="color:var(--cream)">github.com/Msmetamorphosis</strong> is private as this project represents potentially protected intellectual property under <strong style="color:var(--cream)">Metamorphic Curations LLC</strong>. Full implementation details are documented in the Final Report PDF linked in the sidebar.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <span>[Indy-1] NextMission Navigator · AI 7993 · KSU CCSE · Spring 2026</span>
+    <div class="footer-right">
+      <a href="https://vetnavi.ai" class="footer-link" target="_blank">VetNavi.AI ↗</a>
+      <a href="https://github.com/Msmetamorphosis" class="footer-link" target="_blank">GitHub ↗</a>
+      <a href="NextMission_FinalReport.pdf" class="footer-link" target="_blank">Final Report ↗</a>
+      <span style="color:var(--olive)">© 2026 Metamorphic Curations LLC</span>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
