@@ -1,7 +1,7 @@
 # NextMission Navigator · VetNavi.AI
 
 > AI-Powered Veteran Transition Platform · Capstone Project [Indy-1] · AI 7993 Spring 2026
-
+https://msmetamorphosis.github.io/nextmission-capstone/
 **Live Deployment:** [vetnavi.ai](https://vetnavi.ai)  
 **Developer:** Crystal Tubbs · KSU MSAI · Metamorphic Curations LLC  
 **Advisor:** Dr. Arthur Choi · Kennesaw State University CCSE  
